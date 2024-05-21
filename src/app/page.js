@@ -23,7 +23,7 @@ export default function Home() {
       await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode({ 'form-name': 'test', ...data }),
+        body: encode({ 'form-name': 'new', ...data }),
       });
       console.log('submitted');
     } catch (e) {
