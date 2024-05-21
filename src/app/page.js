@@ -39,7 +39,13 @@ export default function Home() {
             animate={{ y: 0, opacity: 1, transition: { delay: 0.1 } }}
             className="z-10 w-full max-w-[1200px] items-center justify-between flex"
           >
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          name="subscriptions"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+          action="/"
+        >
             <motion.div
               initial={{ y: -15, opacity: 0 }}
               animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
