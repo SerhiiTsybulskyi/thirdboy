@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const encode = (data) => {
   return Object.keys(data)
@@ -7,19 +8,26 @@ const encode = (data) => {
 };
 
 const ContactForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, isSubmitted, isSubmitting }
+  } = useForm();
+
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   });
 
-  const handleSubmit = (e) => {
+  const onSubmit = (data, e) => {
     e.preventDefault();
 
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: encode({ 'form-name': 'subscriptions', ...formData }),
+      body: encode({ 'form-name': 'subscriptions', ...data }),
     })
       .then(() => alert('Success!'))
       .catch((error) => alert(error));
@@ -36,24 +44,41 @@ const ContactForm = () => {
   return (
     <div className="bg-white p-8 rounded-lg shadow-md w-96 mx-auto">
     <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Name <input type="text" name="name" value={formData.name} onChange={handleChange} className="mt-1 p-2 border rounded-md w-full resize-none focus:ring focus:ring-blue-300" />
+          Name
+          <input
+            type="text"
+            placeholder="First and last"
+            className="w-full bg-transparent text-body2 text-secondary focus:outline-none"
+            required
+            disabled={isSubmitting}
+            {...register('name')}
+          />
         </label>
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Email <input type="email" name="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 border rounded-md w-full resize-none focus:ring focus:ring-blue-300" />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Message <textarea name="message" value={formData.message} onChange={handleChange} rows="4" className="mt-1 p-2 border rounded-md w-full resize-none focus:ring focus:ring-blue-300"/>
+          Email 
+          <input
+            type="email"
+            placeholder="Email address"
+            className="w-full bg-transparent text-body2 text-secondary focus:outline-none"
+            required
+            disabled={isSubmitting}
+            {...register('email')}
+          />
         </label>
       </div>
       <div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">Submit</button>
+        <button
+          disabled={!isValid}
+          type="submit"
+          role="button"
+          aria-label="Subscribe to newsletter"
+         className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+         >Submit</button>
       </div>
     </form>
     </div>      
